@@ -1,0 +1,81 @@
+sources:
+  sales:
+    enabled: true
+    file_type: csv
+    source_path: data/landing/sales
+    raw_path: data/raw/sales
+    archive_path: data/archive/processed_files/sales
+    rejected_path: data/rejected
+    target_table: raw_sales
+    load_type: incremental
+    partition_column: sale_date
+    file_pattern: "sales_*.csv"
+    delimiter: ","
+    header: true
+    duplicate_check: true
+
+  customers:
+    enabled: true
+    file_type: json
+    source_path: data/landing/customers
+    raw_path: data/raw/customers
+    archive_path: data/archive/processed_files/customers
+    rejected_path: data/rejected
+    target_table: raw_customers
+    load_type: incremental
+    partition_column: updated_at
+    file_pattern: "customers_*.json"
+    duplicate_check: true
+
+  products:
+    enabled: true
+    file_type: excel
+    source_path: data/landing/products
+    raw_path: data/raw/products
+    archive_path: data/archive/processed_files/products
+    rejected_path: data/rejected
+    target_table: raw_products
+    load_type: incremental
+    partition_column: updated_at
+    file_pattern: "products_*.xlsx"
+    sheet_name: products
+    duplicate_check: true
+
+  inventory:
+    enabled: true
+    file_type: parquet
+    source_path: data/landing/inventory
+    raw_path: data/raw/inventory
+    archive_path: data/archive/processed_files/inventory
+    rejected_path: data/rejected
+    target_table: raw_inventory_snapshot
+    load_type: incremental
+    partition_column: snapshot_date
+    file_pattern: "inventory_*.parquet"
+    duplicate_check: true
+
+  web_events:
+    enabled: true
+    file_type: json
+    source_path: data/landing/web_events
+    raw_path: data/raw/web_events
+    archive_path: data/archive/processed_files/web_events
+    rejected_path: data/rejected
+    target_table: raw_web_events
+    load_type: append
+    partition_column: event_timestamp
+    file_pattern: "web_events_*.json"
+    duplicate_check: true
+
+  exchange_rates_api:
+    enabled: false
+    file_type: api
+    source_path: api/exchange_rates
+    raw_path: data/raw/exchange_rates
+    archive_path: data/archive/processed_files/exchange_rates
+    rejected_path: data/rejected
+    target_table: raw_exchange_rates
+    load_type: append
+    partition_column: ingestion_date
+    api_url: "https://api.example.com/exchange-rates"
+    duplicate_check: false
