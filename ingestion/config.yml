@@ -2,7 +2,8 @@ sources:
   sales:
     enabled: true
     file_type: csv
-    source_path: data/landing/sales
+    #source_path: data/landing/sales 
+    source_path: r"C:\Users\avi72\retailer360-data-engineer-project\data\landing"
     raw_path: data/raw/sales
     archive_path: data/archive/processed_files/sales
     rejected_path: data/rejected
@@ -17,7 +18,8 @@ sources:
   customers:
     enabled: true
     file_type: json
-    source_path: data/landing/customers
+    #source_path: data/landing/customers
+    source_path: r"C:\Users\avi72\retailer360-data-engineer-project\data\landing\customers"
     raw_path: data/raw/customers
     archive_path: data/archive/processed_files/customers
     rejected_path: data/rejected
