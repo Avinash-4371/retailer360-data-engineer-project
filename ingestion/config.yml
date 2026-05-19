@@ -3,8 +3,9 @@ sources:
     enabled: true
     file_type: csv
     #source_path: data/landing/sales 
-    source_path: r"C:\Users\avi72\retailer360-data-engineer-project\data\landing"
-    raw_path: data/raw/sales
+    source_path: "C:/Users/avi72/retailer360-data-engineer-project/data/landing/sales/"
+    #raw_path: data/raw/sales
+    raw_path: "C:/Users/avi72/retailer360-data-engineer-project/data/raw/sales"
     archive_path: data/archive/processed_files/sales
     rejected_path: data/rejected
     target_table: raw_sales
@@ -19,8 +20,9 @@ sources:
     enabled: true
     file_type: json
     #source_path: data/landing/customers
-    source_path: r"C:\Users\avi72\retailer360-data-engineer-project\data\landing\customers"
-    raw_path: data/raw/customers
+    source_path: "C:/Users/avi72/retailer360-data-engineer-project/data/landing/customers/"
+    #raw_path: data/raw/customers
+    raw_path: "C:/Users/avi72/retailer360-data-engineer-project/data/raw/customers/"
     archive_path: data/archive/processed_files/customers
     rejected_path: data/rejected
     target_table: raw_customers
@@ -32,8 +34,10 @@ sources:
   products:
     enabled: true
     file_type: excel
-    source_path: data/landing/products
-    raw_path: data/raw/products
+    #source_path: data/landing/products
+    source_path: "C:/Users/avi72/retailer360-data-engineer-project/data/landing/products/"
+    #raw_path: data/raw/products
+    raw_path:  "C:/Users/avi72/retailer360-data-engineer-project/data/raw/products/"
     archive_path: data/archive/processed_files/products
     rejected_path: data/rejected
     target_table: raw_products
@@ -46,8 +50,10 @@ sources:
   inventory:
     enabled: true
     file_type: parquet
-    source_path: data/landing/inventory
-    raw_path: data/raw/inventory
+    #source_path: data/landing/inventory
+    source_path: "C:/Users/avi72/retailer360-data-engineer-project/data/landing/inventory/"
+    #raw_path: data/raw/inventory
+    raw_path: "C:/Users/avi72/retailer360-data-engineer-project/data/raw/inventory/"
     archive_path: data/archive/processed_files/inventory
     rejected_path: data/rejected
     target_table: raw_inventory_snapshot
@@ -59,8 +65,10 @@ sources:
   web_events:
     enabled: true
     file_type: json
-    source_path: data/landing/web_events
-    raw_path: data/raw/web_events
+    #source_path: data/landing/web_events
+    source_path: "C:/Users/avi72/retailer360-data-engineer-project/data/landing/web_events/"
+    #raw_path: data/raw/web_events
+    raw_path: "C:/Users/avi72/retailer360-data-engineer-project/data/raw/web_events/"
     archive_path: data/archive/processed_files/web_events
     rejected_path: data/rejected
     target_table: raw_web_events
