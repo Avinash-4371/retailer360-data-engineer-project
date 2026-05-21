@@ -50,10 +50,18 @@ def copy_file_to_raw(file_path : Path, config_file : dict, load_date: str):
     raw_load_path = raw_path /load_date
     raw_load_path.mkdir(parents=True,exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    raw_file = raw_load_path / f"{file_path.name}_{timestamp}"
+    raw_file = raw_load_path / f"{file_path.stem}_{timestamp}"
     shutil.copy2(file_path,raw_file)
     return raw_file
-    
+
+def copy_file_to_archive(file_path : Path, config_file : dict, load_date: str):
+    raw_path = Path(config_file["archive_path"])
+    raw_load_path = raw_path /load_date
+    raw_load_path.mkdir(parents=True,exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    raw_file = raw_load_path / f"{file_path.name}_{timestamp}"
+    shutil.copy2(file_path,raw_file)
+    return raw_file   
 
 
 
