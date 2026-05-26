@@ -1,5 +1,6 @@
 from pathlib import Path
 import fnmatch
+import hashlib
 
 
 def list_matching_files(file_path : Path , file_pattern : str):
@@ -19,8 +20,22 @@ def validate_file_extension(file_path : Path, file_type: str):
            raise ValueError(f"Invalid extension {files.suffix} for file type {file_type} in file {files.name}")
     return True
 
+def checksum_calculation(file_Path :Path):
+    h=hashlib.md5()
+
+    with open(file_Path,'rb') as f:
+        for chunck in iter(lambda:f.read(4096),b""):
+            h.update(chunck)
+
+    return h.hexdigest()        
+
+
 
 #a=list_matching_files("C:/Users/avi72/retailer360-data-engineer-project/data/landing/sales/","sales_*.csv")
 #print(a)
-b=validate_file_extension("C:/Users/avi72/retailer360-data-engineer-project/data/landing/sales/","csv")
-print(b)
+#b=validate_file_extension("C:/Users/avi72/retailer360-data-engineer-project/data/landing/sales/","csv")
+#print(b)
+c=checksum_calculation("C:/Users/avi72/retailer360-data-engineer-project/data/landing/sales/sales_1.txt")
+print(c)
+d=checksum_calculation("C:/Users/avi72/retailer360-data-engineer-project/data/landing/sales/sales_2.txt")
+print(d)
