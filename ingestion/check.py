@@ -27,7 +27,10 @@ def checksum_calculation(file_Path :Path):
         for chunck in iter(lambda:f.read(4096),b""):
             h.update(chunck)
 
-    return h.hexdigest()        
+    return h.hexdigest()    
+
+def read_column_in_string(df: pd.DataFrame):
+    return df.astype(str)   
 
 
 
