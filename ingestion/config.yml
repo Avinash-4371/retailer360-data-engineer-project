@@ -50,13 +50,13 @@ sources:
   inventory:
     enabled: true
     file_type: parquet
-    #source_path: data/landing/inventory
-    source_path: "C:/Users/avi72/retailer360-data-engineer-project/data/landing/inventory/"
-    #raw_path: data/raw/inventory
-    raw_path: "C:/Users/avi72/retailer360-data-engineer-project/data/raw/inventory/"
+    source_path: data/landing/inventory
+    
+    raw_path: data/raw/inventory
+   
     archive_path: data/archive/processed_files/inventory
     rejected_path: data/rejected
-    target_table: raw_inventory_snapshot
+    target_table: raw_inventory_snapshot(like project,dataset.table)
     load_type: incremental
     partition_column: snapshot_date
     file_pattern: "inventory_*.parquet"
