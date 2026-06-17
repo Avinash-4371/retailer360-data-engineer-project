@@ -26,19 +26,13 @@ def copy_file_to_raw(blob, config_file: dict, run_folder: str) -> str:
     return f"gs://{dest_bucket_name}/{dest_blob_name}"
 
 
-
-from pathlib import Path
-from datetime import datetime
-from google.cloud import storage
-
-storage_client = storage.Client()
-
 def copy_file_to_archive(raw_file_path: str, config_file: dict, load_date: str) -> str:
     """
     Copy a file from RAW GCS path into archive bucket, under a date folder.
     """
     # Parse RAW bucket + blob
     raw_bucket_name, raw_blob_name = raw_file_path.replace("gs://", "").split("/", 1)
+    raw_blob_name = raw_blob_name.rstrip("/")  # Remove leading slash if present
     raw_bucket = storage_client.bucket(raw_bucket_name)
     raw_blob = raw_bucket.blob(raw_blob_name)
 
@@ -58,3 +52,4 @@ def copy_file_to_archive(raw_file_path: str, config_file: dict, load_date: str) 
     # Optional: delete from RAW after archiving
 
     return f"gs://{dest_bucket_name}/{dest_blob_name}"
+
