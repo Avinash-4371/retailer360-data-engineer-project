@@ -1,42 +1,44 @@
+audit_table : retailer-data-engineer.raw_local.audit_files
 sources:
   orders:
     enabled: true
     file_type: csv
     file_pattern: orders_*.csv
-    source_path: gs://retailer_landing_data/orders
+    source_path: gs://retailer_landing_data/orders/
     raw_path: gs://retailer_data/raw/orders
     archive_path: gs://retailer_data/archive/orders
     #rejected_path: data/rejected
     target_table: retailer-data-engineer.raw_local.flatfile_orders
+    audit_table : retailer-data-engineer.raw_local.audit_files
     load_type: incremental
     partition_column: sale_date
     delimiter: ","
     header: true
     duplicate_check: true
 
-  order_items:
-    enabled: true
-    file_type: csv
-    source_path: gs://retailer_landing_data/order_items
-    raw_path: gs://retailer_data/raw/orders_item
-    archive_path: gs://retailer_data/archive/orders_item
-    #rejected_path: data/rejected
-    file_pattern: order_items_*.csv
-    target_table: raw_order_items
-    primary_key: order_item_id
-    load_type: incremental
+  # order_items:
+  #   enabled: true
+  #   file_type: csv
+  #   source_path: gs://retailer_landing_data/order_items
+  #   raw_path: gs://retailer_data/raw/orders_item
+  #   archive_path: gs://retailer_data/archive/orders_item
+  #   #rejected_path: data/rejected
+  #   file_pattern: order_items_*.csv
+  #   target_table: raw_order_items
+  #   primary_key: order_item_id
+  #   load_type: incremental
 
-  customers:
-    enabled: true
-    file_type: json
-    source_path: gs://retailer_landing_data/customers
-    raw_path: gs://retailer_data/raw/customers
-    archive_path: gs://retailer_data/archive/customers
-    #rejected_path:
-    file_pattern: customers_snapshot_*.json
-    target_table: raw_customers
-    primary_key: customer_id
-    load_type: scd2
+  # customers:
+  #   enabled: true
+  #   file_type: json
+  #   source_path: gs://retailer_landing_data/customers
+  #   raw_path: gs://retailer_data/raw/customers
+  #   archive_path: gs://retailer_data/archive/customers
+  #   #rejected_path:
+  #   file_pattern: customers_snapshot_*.json
+  #   target_table: raw_customers
+  #   primary_key: customer_id
+  #   load_type: scd2
 
   # products:
   #   enabled: false

@@ -3,9 +3,9 @@ from pathlib import Path
 
 def read_gcs_file_to_dataframe(file_path: str, config_file: dict) -> pd.DataFrame:
 
-    file_ext = Path(file_path).suffix.lower()
+    file_ext = config_file.get("file_type", "").lower()
 
-    if file_ext == ".csv":
+    if file_ext == "csv":
         return read_csv_file(file_path, config_file)
     elif file_ext == ".json":
         return read_json_file(file_path, config_file)
