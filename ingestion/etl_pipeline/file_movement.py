@@ -53,3 +53,56 @@ def copy_file_to_archive(raw_file_path: str, config_file: dict, load_date: str) 
 
     return f"gs://{dest_bucket_name}/{dest_blob_name}"
 
+def copy_file_to_duplicate(raw_file_path: str, config_file: dict, load_date: str) -> str:
+    """
+    Copy a file from RAW GCS path into archive bucket, under a date folder.
+    """
+    # Parse RAW bucket + blob
+    raw_bucket_name, raw_blob_name = raw_file_path.replace("gs://", "").split("/", 1)
+    raw_blob_name = raw_blob_name.rstrip("/")  # Remove leading slash if present
+    raw_bucket = storage_client.bucket(raw_bucket_name)
+    raw_blob = raw_bucket.blob(raw_blob_name)
+
+    # Parse destination bucket + prefix
+    duplicate_path = config_file["duplicate_files_path"]  # e.g. "gs://retailer360-data/duplicate/inventory/"
+    dest_bucket_name, dest_prefix = duplicate_path.replace("gs://", "").split("/", 1)
+    dest_bucket = storage_client.bucket(dest_bucket_name)
+
+    # Build destination blob name with date folder + timestamp
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    file_name = Path(raw_file_path).name
+    dest_blob_name = f"{dest_prefix}/{load_date}/{file_name}_{timestamp}"
+
+    # Copy blob from RAW → ARCHIVE
+    raw_bucket.copy_blob(raw_blob, dest_bucket, dest_blob_name)
+
+    # Optional: delete from RAW after archiving
+
+    return f"gs://{dest_bucket_name}/{dest_blob_name}"
+
+def copy_file_to_rejected(raw_file_path: str, config_file: dict, load_date: str) -> str:
+    """
+    Copy a file from RAW GCS path into rejected bucket, under a date folder.
+    """
+    # Parse RAW bucket + blob
+    raw_bucket_name, raw_blob_name = raw_file_path.replace("gs://", "").split("/", 1)
+    raw_blob_name = raw_blob_name.rstrip("/")  # Remove leading slash if present
+    raw_bucket = storage_client.bucket(raw_bucket_name)
+    raw_blob = raw_bucket.blob(raw_blob_name)
+
+    # Parse destination bucket + prefix
+    rejected_path = config_file["rejected_path"]  # e.g. "gs://retailer360-data/rejected/inventory/"
+    dest_bucket_name, dest_prefix = rejected_path.replace("gs://", "").split("/", 1)
+    dest_bucket = storage_client.bucket(dest_bucket_name)
+
+    # Build destination blob name with date folder + timestamp
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    file_name = Path(raw_file_path).name
+    dest_blob_name = f"{dest_prefix}/{load_date}/{file_name}_{timestamp}"
+
+    # Copy blob from RAW → ARCHIVE
+    raw_bucket.copy_blob(raw_blob, dest_bucket, dest_blob_name)
+
+    # Optional: delete from RAW after archiving
+
+    return f"gs://{dest_bucket_name}/{dest_blob_name}"
