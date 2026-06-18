@@ -1,4 +1,4 @@
-audit_table : retailer-data-engineer.raw_local.audit_files
+audit_table: retailer-data-engineer.raw_local.audit_files
 sources:
   orders:
     enabled: true
@@ -7,7 +7,8 @@ sources:
     source_path: gs://retailer_landing_data/orders/
     raw_path: gs://retailer_data/raw/orders
     archive_path: gs://retailer_data/archive/orders
-    #rejected_path: data/rejected
+    duplicate_files_path: gs://retailer_data/duplicate/orders
+    rejected_path: gs://retailer_data/rejected/orders
     target_table: retailer-data-engineer.raw_local.flatfile_orders
     audit_table : retailer-data-engineer.raw_local.audit_files
     load_type: incremental
