@@ -1,7 +1,7 @@
 audit_table: retailer-data-engineer.raw_local.audit_files
 sources:
   orders:
-    enabled: true
+    enabled: False
     file_type: csv
     file_pattern: orders_*.csv
     source_path: gs://retailer_landing_data/orders/
@@ -17,53 +17,62 @@ sources:
     header: true
     duplicate_check: true
 
-  # order_items:
-  #   enabled: true
-  #   file_type: csv
-  #   source_path: gs://retailer_landing_data/order_items
-  #   raw_path: gs://retailer_data/raw/orders_item
-  #   archive_path: gs://retailer_data/archive/orders_item
-  #   #rejected_path: data/rejected
-  #   file_pattern: order_items_*.csv
-  #   target_table: raw_order_items
-  #   primary_key: order_item_id
-  #   load_type: incremental
+  order_items:
+    enabled: False
+    file_type: csv
+    file_pattern: order_items_*.csv
+    source_path: gs://retailer_landing_data/order_items/
+    raw_path: gs://retailer_data/raw/order_items
+    archive_path: gs://retailer_data/archive/order_items
+    duplicate_files_path: gs://retailer_data/duplicate/order_items
+    rejected_path: gs://retailer_data/rejected/order_items
+    target_table: retailer-data-engineer.raw_local.flatfile_order_items
+    audit_table : retailer-data-engineer.raw_local.audit_files
+    primary_key: order_item_id
+    load_type: incremental
 
-  # customers:
-  #   enabled: true
-  #   file_type: json
-  #   source_path: gs://retailer_landing_data/customers
-  #   raw_path: gs://retailer_data/raw/customers
-  #   archive_path: gs://retailer_data/archive/customers
-  #   #rejected_path:
-  #   file_pattern: customers_snapshot_*.json
-  #   target_table: raw_customers
-  #   primary_key: customer_id
-  #   load_type: scd2
+  customers:
+    enabled: False
+    file_type: json
+    file_pattern: customers_snapshot_*.json
+    source_path: gs://retailer_landing_data/customers/
+    raw_path: gs://retailer_data/raw/customers
+    archive_path: gs://retailer_data/archive/customers
+    duplicate_files_path: gs://retailer_data/duplicate/customers
+    rejected_path: gs://retailer_data/rejected/customers
+    target_table: retailer-data-engineer.raw_local.flatfile_customers
+    audit_table : retailer-data-engineer.raw_local.audit_files
+    primary_key: customer_id
+    load_type: scd2
 
-  # products:
-  #   enabled: false
-  #   file_type: excel
-  #   source_path: gs://retailer_data/raw/products
-  #   raw_path:
-  #   archive_path:
-  #   rejected_path:
-  #   file_pattern: product_master_snapshot_*.xlsx
-  #   target_table: raw_products
-  #   primary_key: product_id
-  #   load_type: scd2
+  products:
+    enabled: False
+    file_type: excel
+    sheet_name: "Sheet1"
+    file_pattern: product_master_snapshot_*.xlsx
+    source_path: gs://retailer_landing_data/products/
+    raw_path: gs://retailer_data/raw/products
+    archive_path: gs://retailer_data/archive/products
+    duplicate_files_path: gs://retailer_data/duplicate/products
+    rejected_path: gs://retailer_data/rejected/products
+    target_table: retailer-data-engineer.raw_local.flatfile_products
+    audit_table : retailer-data-engineer.raw_local.audit_files
+    primary_key: product_id
+    load_type: scd2
 
-  # stores:
-  #   enabled: false
-  #   file_type: csv
-  #   source_path: data/raw/stores
-  #   raw_path:
-  #   archive_path:
-  #   rejected_path:
-  #   file_pattern: store_master_snapshot_*.csv
-  #   target_table: raw_stores
-  #   primary_key: store_id
-  #   load_type: full
+  stores:
+    enabled: true
+    file_type: csv
+    file_pattern: store_master_snapshot_*.csv
+    source_path: gs://retailer_landing_data/stores/
+    raw_path: gs://retailer_data/raw/stores
+    archive_path: gs://retailer_data/archive/stores
+    duplicate_files_path: gs://retailer_data/duplicate/stores
+    rejected_path: gs://retailer_data/rejected/stores
+    target_table: retailer-data-engineer.raw_local.flatfile_stores
+    audit_table : retailer-data-engineer.raw_local.audit_files
+    primary_key: store_id
+    load_type: full
 
   # inventory_snapshot:
   #   enabled: false
@@ -90,18 +99,20 @@ sources:
   #   primary_key: promotion_id
   #   load_type: full
 
-  # returns:
-  #   enabled: false
-  #   file_type: csv
-  #   source_path: data/raw/returns
-  #   raw_path:
-  #   archive_path:
-  #   rejected_path:
-  #   file_pattern: returns_*.csv
-  #   target_table: raw_returns
-  #   primary_key: return_id
-  #   load_type: incremental
-  #   partition_column: return_date
+  returns:
+    enabled: True
+    file_type: csv
+    file_pattern: returns_*.csv
+    source_path: gs://retailer_landing_data/returns/
+    raw_path: gs://retailer_data/raw/returns
+    archive_path: gs://retailer_data/archive/returns
+    duplicate_files_path: gs://retailer_data/duplicate/returns
+    rejected_path: gs://retailer_data/rejected/returns
+    target_table: retailer-data-engineer.raw_local.flatfile_returns
+    audit_table : retailer-data-engineer.raw_local.audit_files
+    primary_key: return_id
+    load_type: incremental
+    partition_column: return_date
 
   # supplier_shipments:
   #   enabled: false

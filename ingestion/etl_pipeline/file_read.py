@@ -7,11 +7,11 @@ def read_gcs_file_to_dataframe(file_path: str, config_file: dict) -> pd.DataFram
 
     if file_ext == "csv":
         return read_csv_file(file_path, config_file)
-    elif file_ext == ".json":
+    elif file_ext == "json":
         return read_json_file(file_path, config_file)
-    elif file_ext in [".xls", ".xlsx"]:
+    elif file_ext in ["xls", "xlsx","excel"]:
         return read_excel_file(file_path, config_file)
-    elif file_ext == ".parquet":
+    elif file_ext == "parquet":
         return read_parquet_file(file_path)
     else:
         raise ValueError(f"Unsupported file type: {file_ext}")
@@ -24,10 +24,13 @@ def read_csv_file(file_path: str, config_file: dict) -> pd.DataFrame:
 
 
 def read_json_file(file_path: str, config_file: dict) -> pd.DataFrame:
+    # Ensure gcsfs is installed if using gs:// paths
+    lines = config_file.get("lines", False)
     try:
-        return pd.read_json(file_path, dtype=str, lines=True)
+        return pd.read_json(file_path, dtype=str, lines=lines)
     except ValueError:
-        return pd.read_json(file_path, dtype=str)
+        # Try opposite mode if first attempt fails
+        return pd.read_json(file_path, dtype=str, lines=not lines)
 
 
 def read_excel_file(file_path: str, config_file: dict) -> pd.DataFrame:
