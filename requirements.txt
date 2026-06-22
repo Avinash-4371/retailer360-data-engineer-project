@@ -10,3 +10,4 @@ dbt-bigquery==1.8.1
 apache-airflow==2.9.1
 python-dotenv==1.0.1
 pytest==8.2.0
+gcsfs==2024.3.1
