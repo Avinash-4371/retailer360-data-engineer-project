@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 import logging
+import os
 from pathlib import Path
 from google.cloud import storage
 import yaml
@@ -204,8 +205,11 @@ def process_source(source_name, source_config):
     return results
 
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+config_path = os.path.join(BASE_DIR, "config.yml")
+
 def main():
-    with open("config.yml", "r") as f:
+    with open(config_path, "r") as f:
         config = yaml.safe_load(f)
 
     all_results = []
