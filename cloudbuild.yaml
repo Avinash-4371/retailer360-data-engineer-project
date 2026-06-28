@@ -1,5 +1,5 @@
 substitutions:
-  _REGION: asia-south1
+  _REGION: us-central1
   _REPOSITORY: retailer360-repo
   _IMAGE_NAME: retailer360-ingestion
   _JOB_NAME: retailer360-ingestion-job
@@ -23,7 +23,7 @@ steps:
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-      - 'run'''
+      - 'run'
       - 'jobs'
       - 'deploy'
       - '${_JOB_NAME}'
