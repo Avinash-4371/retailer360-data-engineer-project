@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 import logging
+import os
 from pathlib import Path
 from google.cloud import storage
 import yaml
@@ -9,7 +10,7 @@ from bq_load import load_to_bigquery
 from schema import add_metadata_columns, convert_all_columns_to_string
 from audit import file_checksum, insert_audit_record, file_process_check
 from validate_schema import validate_schema
-from storage_utils import (copy_file_to_archive, copy_file_to_duplicate,copy_file_to_raw,copy_file_to_rejected)
+from storage_utils import copy_file_to_raw, copy_file_to_target
 
 
 logging.basicConfig(
@@ -83,7 +84,7 @@ def process_source(source_name, source_config):
             if duplicate_check:
                 logging.warning(f"Duplicate file detected: {file_name}")
 
-                duplicate_uri = copy_file_to_duplicate(raw_uri,source_config,load_date)
+                duplicate_uri = copy_file_to_target(raw_uri,source_config['duplicate_files_path'],load_date)
 
                 insert_audit_record(audit_table,source_name,file_name,checksum,"DUPLICATE")
 
@@ -121,9 +122,11 @@ def process_source(source_name, source_config):
                     f"Schema validation failed for {file_name}: {schema_result['message']}"
                 )
 
-                rejected_uri = copy_file_to_rejected(raw_uri,source_config,load_date)
+                rejected_uri = copy_file_to_target(raw_uri,source_config['rejected_path'],load_date)
 
                 insert_audit_record(audit_table,source_name,file_name,checksum,"FAILED")
+
+                logging.info(f"Failed file moved to rejected: {rejected_uri}")
 
                 results.append({"source": source_name,
                                 "file_name": file_name,
@@ -145,7 +148,7 @@ def process_source(source_name, source_config):
             # ---------------------------------------------------------
             # Step 9: Move file to archive after successful load
             # ---------------------------------------------------------
-            archive_uri = copy_file_to_archive(raw_uri,source_config,load_date )
+            archive_uri = copy_file_to_target(raw_uri,source_config['archive_path'],load_date )
 
             # ---------------------------------------------------------
             # Step 10: Insert SUCCESS audit
@@ -171,7 +174,8 @@ def process_source(source_name, source_config):
             # Move failed file to rejected folder if it exists in raw
             if raw_uri:
                 try:
-                    rejected_uri = copy_file_to_rejected(raw_uri,source_config,load_date)
+                    rejected_uri = copy_file_to_target(raw_uri,source_config['rejected_path'],load_date)
+                    print("move to rejected")
 
                     logging.info(f"Failed file moved to rejected: {rejected_uri}")
 
@@ -201,8 +205,11 @@ def process_source(source_name, source_config):
     return results
 
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+config_path = os.path.join(BASE_DIR, "config.yml")
+
 def main():
-    with open("config.yml", "r") as f:
+    with open(config_path, "r") as f:
         config = yaml.safe_load(f)
 
     all_results = []
