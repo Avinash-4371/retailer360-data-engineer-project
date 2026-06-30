@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: retailer_raw
+    database: retailer-data-engineer
+
+    schema: raw_local
+
+
+    tables:
+      - name: flatfile_orders
+      - name: flatfile_customers
+      - name: flatfile_order_items
+      - name: flatfile_products
+      - name: flatfile_returns
+      - name: flatfile_shipment
+      - name: flatfile_stores

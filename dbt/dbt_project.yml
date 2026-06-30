@@ -1,0 +1,24 @@
+name: 'retailer360_dbt'
+version: '1.0.0'
+
+# This configures the profile dbt should use from your ~/.dbt/profiles.yml file
+profile: 'retailer360_dbt'
+
+# These paths tell dbt where to look for different types of files
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Configuring models 
+# This tells dbt where to build your staging models in BigQuery
+models:
+  retailer360_dbt:
+    staging:
+      +materialized: view
