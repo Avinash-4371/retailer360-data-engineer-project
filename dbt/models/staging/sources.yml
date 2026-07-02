@@ -11,5 +11,8 @@ sources:
       - name: flatfile_order_items
       - name: flatfile_products
       - name: flatfile_returns
-      - name: flatfile_shipment
       - name: flatfile_stores
+      - name: flatfile_supplier_shipments
+      - name: flatfile_inventory_snapshot
+      - name: flatfile_promotions
+      
