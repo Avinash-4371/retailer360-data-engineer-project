@@ -3,9 +3,7 @@ version: 2
 sources:
   - name: retailer_raw
     database: retailer-data-engineer
-
     schema: raw_local
-
 
     tables:
       - name: flatfile_orders

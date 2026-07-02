@@ -21,8 +21,5 @@ initcap(country) as country,
 upper(loyalty_tier) as loyalty_tier,
 upper(customer_status) as customer_status,
 PARSE_TIMESTAMP('%Y-%m-%d', updated_at) AS updated_at
-
-
-
 FROM latest_customers
 where rn =1
