@@ -8,10 +8,10 @@ SELECT
   state,
   country,
   region,
-  opening_date,
+  CAST(opening_date AS DATE) AS opening_date,
   manager_id,
   SAFE_CAST(active_flag AS BOOL) AS active_flag,
-  PARSE_TIMESTAMP('%Y-%m-%d %H:%M:%S', updated_at) as updated_at,
+  CAST(updated_at AS DATE) AS updated_at,
   load_timestamp,
   source_file_name as file_name
 FROM {{ source('retailer_raw','flatfile_stores') }}

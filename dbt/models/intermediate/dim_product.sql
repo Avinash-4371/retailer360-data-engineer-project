@@ -12,7 +12,7 @@ SELECT
   mrp,
   launch_date,
   active_flag,
-  dbt_valid_from AS effective_start_ts,
-  COALESCE(dbt_valid_to, TIMESTAMP('9999-12-31')) AS effective_end_ts,
+  dbt_valid_from AS effective_start_date,
+  COALESCE(dbt_valid_to, TIMESTAMP('9999-12-31')) AS effective_end_date,
   dbt_valid_to IS NULL AS is_current
 FROM {{ ref('snap_products') }}
