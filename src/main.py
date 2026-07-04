@@ -209,26 +209,69 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 config_path = os.path.join(BASE_DIR, "config.yml")
 
 def main():
-    with open(config_path, "r") as f:
-        config = yaml.safe_load(f)
+   """
+   Entry point. Behavior:
+   - If SOURCE_NAME env var is set → process ONLY that source (Airflow mode)
+   - Otherwise → process ALL enabled sources (backward-compatible mode)
+   """
+   with open(config_path, "r") as f:
+       config = yaml.safe_load(f)
 
-    all_results = []
+   # :key: Read source from env variable (Airflow passes this per task)
+   source_name = os.environ.get("SOURCE_NAME")
+   all_results = []
 
-    for source_name, source_config in config["sources"].items():
-        if not source_config.get("enabled", False):
-            logging.info(f"Skipping disabled source: {source_name}")
-            continue
+   if source_name:
+       # -----------------------------------------------------------
+       # Airflow / parallel mode: single source per invocation
+       # -----------------------------------------------------------
+       logging.info(f"Running in single-source mode: {source_name}")
 
-        logging.info(f"Processing source: {source_name}")
+       if source_name not in config["sources"]:
+           raise ValueError(
+               f"Source '{source_name}' not found in config.yml"
+           )
 
-        results = process_source(source_name, source_config)
-        all_results.extend(results)
+       source_config = config["sources"][source_name]
 
-    logging.info("Pipeline execution completed")
+       if not source_config.get("enabled", False):
+           logging.warning(
+               f"Source '{source_name}' is disabled. Exiting cleanly."
+           )
+           return
 
-    for res in all_results:
-        print(res)
+       logging.info(f"Processing source: {source_name}")
+       results = process_source(source_name, source_config)
+       all_results.extend(results)
+
+   else:
+       # -----------------------------------------------------------
+       # Legacy mode: process all enabled sources (unchanged)
+       # -----------------------------------------------------------
+       logging.info("Running in all-sources mode")
+
+       for source_name, source_config in config["sources"].items():
+           if not source_config.get("enabled", False):
+               logging.info(f"Skipping disabled source: {source_name}")
+               continue
+
+           logging.info(f"Processing source: {source_name}")
+           results = process_source(source_name, source_config)
+           all_results.extend(results)
+
+   logging.info("Pipeline execution completed")
+
+   # Print summary
+   for res in all_results:
+       print(res)
+
+   # :rotating_light: Fail Cloud Run Job if any file failed (so Airflow sees red)
+   failed = [r for r in all_results if r["status"] == "FAILED"]
+   if failed:
+       raise RuntimeError(
+           f"{len(failed)} file(s) failed. See logs above."
+       )
 
 
 if __name__ == "__main__":
-    main()
+   main()
