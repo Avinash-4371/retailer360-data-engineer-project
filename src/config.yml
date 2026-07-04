@@ -1,7 +1,7 @@
 audit_table: retailer-data-engineer.raw_local.audit_files
 sources:
   orders:
-    enabled: false
+    enabled: true
     file_type: csv
     file_pattern: order_*.csv
     source_path: gs://retailer_landing_data/orders/
@@ -35,7 +35,7 @@ sources:
     duplicate_check: true
 
   customers:
-    enabled: False
+    enabled: true
     file_type: json
     file_pattern: customers_snapshot_*.json
     source_path: gs://retailer_landing_data/customers/
@@ -49,7 +49,7 @@ sources:
     load_type: scd2
 
   products:
-    enabled: False
+    enabled: true
     file_type: excel
     sheet_name: "Sheet1"
     file_pattern: product_master_snapshot_*.xlsx
@@ -64,7 +64,7 @@ sources:
     load_type: scd2
 
   stores:
-    enabled: false
+    enabled: true
     file_type: csv
     file_pattern: store_master_snapshot_*.csv
     source_path: gs://retailer_landing_data/stores/
@@ -77,33 +77,37 @@ sources:
     primary_key: store_id
     load_type: full
 
-  # inventory_snapshot:
-  #   enabled: false
-  #   file_type: parquet
-  #   source_path: data/raw/inventory
-  #   raw_path:
-  #   archive_path:
-  #   rejected_path:
-  #   file_pattern: inventory_snapshot_*.parquet
-  #   target_table: raw_inventory_snapshot
-  #   primary_key: snapshot_date,store_id,product_id
-  #   load_type: incremental
-  #   partition_column: snapshot_date
+  inventory_snapshot:
+    enabled: true
+    file_type: parquet
+    file_pattern: inventory_snapshot_*.parquet
+    source_path: gs://retailer_landing_data/source_path/
+    raw_path: gs://retailer_data/raw/source_path
+    archive_path: gs://retailer_data/archive/source_path
+    duplicate_files_path: gs://retailer_data/duplicate/source_path
+    rejected_path: gs://retailer_data/rejected/source_path
+    target_table: retailer-data-engineer.raw_local.flatfile_source_path
+    audit_table : retailer-data-engineer.raw_local.audit_files
+    primary_key: snapshot_date,store_id,product_id
+    load_type: incremental
+    partition_column: snapshot_date
 
-  # promotions:
-  #   enabled: false
-  #   file_type: csv
-  #   source_path: data/raw/promotions
-  #   raw_path:
-  #   archive_path:
-  #   rejected_path:
-  #   file_pattern: promotions_*.csv
-  #   target_table: raw_promotions
-  #   primary_key: promotion_id
-  #   load_type: full
+  promotions:
+    enabled: true
+    file_type: csv
+    file_pattern: promotions_*.csv
+    source_path: gs://retailer_landing_data/promotions/
+    raw_path: gs://retailer_data/raw/promotions
+    archive_path: gs://retailer_data/archive/promotions
+    duplicate_files_path: gs://retailer_data/duplicate/promotions
+    rejected_path: gs://retailer_data/rejected/promotions
+    target_table: retailer-data-engineer.raw_local.flatfile_promotions
+    audit_table : retailer-data-engineer.raw_local.audit_files
+    primary_key: promotion_id
+    load_type: full
 
   returns:
-    enabled: false
+    enabled: true
     file_type: csv
     file_pattern: returns_*.csv
     source_path: gs://retailer_landing_data/returns/
@@ -117,18 +121,19 @@ sources:
     load_type: incremental
     partition_column: return_date
 
-  # supplier_shipments:
-  #   enabled: false
-  #   file_type: csv
-  #   source_path: data/raw/supplier_shipments
-  #   raw_path:
-  #   archive_path:
-  #   rejected_path:
-  #   file_pattern: supplier_shipments_*.csv
-  #   target_table: raw_supplier_shipments
-  #   primary_key: shipment_id
-  #   load_type: incremental
-  #   partition_column: shipment_date
+  supplier_shipments:
+    enabled: true
+    file_type: csv
+    source_path: gs://retailer_landing_data/supplier_shipments/
+    raw_path: gs://retailer_data/raw/supplier_shipments
+    archive_path: gs://retailer_data/archive/supplier_shipments
+    duplicate_files_path: gs://retailer_data/duplicate/supplier_shipments
+    rejected_path: gs://retailer_data/rejected/supplier_shipments
+    target_table: retailer-data-engineer.raw_local.flatfile_supplier_shipments
+    audit_table : retailer-data-engineer.raw_local.audit_files
+    primary_key: shipment_id
+    load_type: incremental
+    partition_column: shipment_date
 
   # web_events:
   #   enabled: false
