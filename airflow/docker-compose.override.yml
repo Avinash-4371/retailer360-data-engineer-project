@@ -1,24 +1,16 @@
 services:
-  scheduler:
-    volumes:
-      - /c/Users/avi72/AppData/Roaming/gcloud:/usr/local/airflow/gcloud:ro
-    environment:
-      - GOOGLE_APPLICATION_CREDENTIALS=/usr/local/airflow/gcloud/application_default_credentials.json
+ scheduler:
+   volumes:
+     - "C:/Users/avi72/AppData/Roaming/gcloud:/usr/local/airflow/gcloud:ro"
 
-  api-server:
-    volumes:
-      - /c/Users/avi72/AppData/Roaming/gcloud:/usr/local/airflow/gcloud:ro
-    environment:
-      - GOOGLE_APPLICATION_CREDENTIALS=/usr/local/airflow/gcloud/application_default_credentials.json
+ api-server:
+   volumes:
+     - "C:/Users/avi72/AppData/Roaming/gcloud:/usr/local/airflow/gcloud:ro"
 
-  triggerer:
-    volumes:
-      - /c/Users/avi72/AppData/Roaming/gcloud:/usr/local/airflow/gcloud:ro
-    environment:
-      - GOOGLE_APPLICATION_CREDENTIALS=/usr/local/airflow/gcloud/application_default_credentials.json
+ triggerer:
+   volumes:
+     - "C:/Users/avi72/AppData/Roaming/gcloud:/usr/local/airflow/gcloud:ro"
 
-  dag-processor:
-    volumes:
-      - /c/Users/avi72/AppData/Roaming/gcloud:/usr/local/airflow/gcloud:ro
-    environment:
-      - GOOGLE_APPLICATION_CREDENTIALS=/usr/local/airflow/gcloud/application_default_credentials.json
+ dag-processor:
+   volumes:
+     - "C:/Users/avi72/AppData/Roaming/gcloud:/usr/local/airflow/gcloud:ro"
