@@ -22,9 +22,14 @@ models:
   retailer360_dbt:
     staging:
       +materialized: view
+      +schema: retailer_staging
+    marts:
+      +materialized: table
+      +schema: retailer_mart 
 
 
 snapshots:
   retailer360_dbt:
     +target_schema: retailer_staging
+
 

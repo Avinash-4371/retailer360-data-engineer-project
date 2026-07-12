@@ -28,3 +28,7 @@ dbt_packages/
 # OS Files
 # -----------------------------
 .DS_Store
+
+**/.terraform/*
+*.tfstate
+*.tfstate.*
