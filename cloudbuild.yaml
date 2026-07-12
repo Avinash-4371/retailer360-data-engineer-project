@@ -1,49 +1,50 @@
 substitutions:
   _REGION: us-central1
   _REPOSITORY: retailer360-repo
-  _IMAGE_NAME: retailer360-ingestion
-  _JOB_NAME: retailer360-ingestion-job
+  _IMAGE_NAME: retailer360-dbt
+  _JOB_NAME: retailer360-dbt-job
 
 steps:
-  # Step 1: Build Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - build
+      - -f
+      - dbt/Dockerfile.dbt
       - -t
-      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$SHORT_SHA'
-      - .
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$BUILD_ID'
+      - dbt
 
-  # Step 2: Push image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - push
-      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$SHORT_SHA'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$BUILD_ID'
 
-  # Step 3: Deploy Cloud Run Job
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
-      - 'run'
-      - 'jobs'
-      - 'deploy'
+      - run
+      - jobs
+      - deploy
       - '${_JOB_NAME}'
-      - '--image'
-      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$SHORT_SHA'
-      - '--region'
+      - --image
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$BUILD_ID'
+      - --region
       - '${_REGION}'
+      - --service-account
+      - retailer360-cloudrun-sa@retailer-data-engineer.iam.gserviceaccount.com
       - --memory
-      - '1Gi'
-      - '--cpu'
+      - 1Gi
+      - --cpu
       - '1'
-      - '--max-retries'
+      - --max-retries
       - '1'
-      - '--task-timeout'
+      - --task-timeout
       - '3600'
-      - '--set-env-vars'
+      - --set-env-vars
       - 'PROJECT_ID=$PROJECT_ID'
 
 images:
-  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$SHORT_SHA'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$BUILD_ID'
 
 options:
   logging: CLOUD_LOGGING_ONLY
