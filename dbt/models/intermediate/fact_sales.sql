@@ -86,5 +86,7 @@ LEFT JOIN promotions
   ON items.promotion_id = promotions.promotion_id
 
 {% if is_incremental() %}
-WHERE orders.order_date > (SELECT COALESCE(MAX(order_date), DATE('1900-01-01')) FROM {{ this }})
+  {% set max_load_time = "(SELECT COALESCE(MAX(loaded_at), TIMESTAMP('1900-01-01')) FROM " ~ this ~ ")" %}
+  WHERE orders.load_timestamp > {{ max_load_time }}
+     OR items.load_timestamp > {{ max_load_time }}
 {% endif %}
