@@ -23,9 +23,12 @@ models:
     staging:
       +materialized: view
       +schema: retailer_staging
+    intermediate:
+      +materialized: table
+      +schema: retailer_staging  
     marts:
       +materialized: table
-      +schema: retailer_mart 
+      +schema: retailer_mart   
 
 
 snapshots:
