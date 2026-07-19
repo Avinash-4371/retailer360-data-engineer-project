@@ -124,6 +124,7 @@ sources:
   supplier_shipments:
     enabled: true
     file_type: csv
+    file_pattern: supplier_shipments_*.csv
     source_path: gs://retailer_landing_data/supplier_shipments/
     raw_path: gs://retailer_data/raw/supplier_shipments
     archive_path: gs://retailer_data/archive/supplier_shipments
